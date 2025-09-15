@@ -9,34 +9,34 @@ services:
     ports:
       - "8501:8501"
     volumes:
-      - .env:/app/.env
       # 开发环境代码映射
       - ./web:/app/web
       - ./tradingagents:/app/tradingagents
       - ./scripts:/app/scripts
       # 日志目录映射 - 重要：将容器内日志映射到当前项目的logs目录
       - ./logs:/app/logs
-    env_file:
-      - .env
     environment:
-      PYTHONUNBUFFERED: 1
-      PYTHONDONTWRITEBYTECODE: 1
-      # 时区配置
-      TZ: "Asia/Shanghai"
-      # 日志配置
-      TRADINGAGENTS_LOG_LEVEL: "INFO"
-      TRADINGAGENTS_LOG_DIR: "/app/logs"
-      TRADINGAGENTS_LOG_FILE: "/app/logs/tradingagents.log"
-      TRADINGAGENTS_LOG_MAX_SIZE: "100MB"
-      TRADINGAGENTS_LOG_BACKUP_COUNT: "5"
-      # Docker专用数据库配置（覆盖.env中的本地配置）
-      TRADINGAGENTS_MONGODB_URL: mongodb://admin:tradingagents123@mongodb:27017/tradingagents?authSource=admin
-      TRADINGAGENTS_REDIS_URL: redis://:tradingagents123@redis:6379
-      TRADINGAGENTS_CACHE_TYPE: redis
-      # Docker环境标识和PDF支持
-      DOCKER_CONTAINER: "true"
-      DISPLAY: ":99"
-    command: /usr/local/bin/start-xvfb.sh python -m streamlit run web/app.py --server.address=0.0.0.0 --server.port=8501
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - TZ=Asia/Shanghai
+      - TRADINGAGENTS_LOG_LEVEL=INFO
+      - TRADINGAGENTS_LOG_DIR=/app/logs
+      - TRADINGAGENTS_LOG_FILE=/app/logs/tradingagents.log
+      - TRADINGAGENTS_LOG_MAX_SIZE=100MB
+      - TRADINGAGENTS_LOG_BACKUP_COUNT=5
+      - TRADINGAGENTS_MONGODB_URL=mongodb://admin:tradingagents123@mongodb:27017/tradingagents?authSource=admin
+      - TRADINGAGENTS_REDIS_URL=redis://:tradingagents123@redis:6379
+      - TRADINGAGENTS_CACHE_TYPE=redis
+      - DOCKER_CONTAINER=true
+      - DISPLAY=:99
+      - DEFAULT_CHINA_DATA_SOURCE=tdx
+      - DASHSCOPE_API_KEY=sk-aade65fbfb094692bbc3d548979e16ad
+      - GOOGLE_API_KEY=AIzaSyBqxYdyO4kxj1bJAItx77nv0n7FARPnwl0
+      - TUSHARE_TOKEN=9e69585e18c70b1818d4563fd9ca48c0128649492e05785c54958d5c
+      - FINNHUB_API_KEY=d1h9v09r01qsvr28rv4gd1h9v09r01qsvr28rv50
+      - OPENROUTER_API_KEY=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
+      - DEEPSEEK_API_KEY=your_deepseek_api_key_here
+    command: python -m streamlit run web/app.py --server.address=0.0.0.0 --server.port=8501
     depends_on:
       - mongodb
       - redis
